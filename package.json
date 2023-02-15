@@ -1,0 +1,11 @@
+{
+  "name": "@ibgrav/wretched",
+  "packageManager": "pnpm@7.27.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm -F wretched build:runtime && pnpm -r --parallel dev"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.4"
+  }
+}
