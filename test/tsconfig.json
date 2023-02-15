@@ -9,7 +9,7 @@
     "target": "ESNext",
     "moduleResolution": "node",
 
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM"],
 
     "strict": true,
     "noEmit": true,

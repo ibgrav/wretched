@@ -8,29 +8,31 @@ export type Type = string | Component<unknown>;
 
 export type Attribute = Primitive | Array<Primitive | Attribute> | Record<string, Primitive>;
 
-export type Props<P> = P & InherentProps;
+export type Props<P> = P & InherentProps & CSSProperties & MediaQuery;
 
 export type Component<P> = (props: Props<P>) => Element;
 
 export type Element = [string, Type, Props<unknown>];
 
-export interface InherentProps {
+export interface CustomProps {
+  id?: boolean;
+}
+
+export interface InherentProps extends CustomProps {
   children?: Children;
 }
 
-type CSSProperties = CSS.Properties & {
-  id?: boolean;
-};
+export type CSSProperties = CSS.Properties;
 
-interface MediaQuery {
+export interface MediaQuery {
   screen?: boolean;
   print?: boolean;
-  min?: string;
-  max?: string;
+  "min-width"?: string;
+  "max-width"?: string;
 }
 
 export interface IntrinsicElements extends GlobalElements {
-  [key: string]: CSSProperties | MediaQuery;
+  [key: string]: CSSProperties | MediaQuery | CustomProps;
 }
 
 export interface GlobalElements {
