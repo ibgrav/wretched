@@ -10,6 +10,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    concurrency:
+      group: publish-website
+      cancel-in-progress: true
+
     permissions:
       pages: write
       id-token: write
@@ -35,7 +39,6 @@ jobs:
       - run: pnpm -F website build
 
       - uses: actions/configure-pages@v2
-
       - uses: actions/upload-pages-artifact@v1
         with:
           path: packages/website/docs/.vitepress/dist
