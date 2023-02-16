@@ -1,4 +1,3 @@
-import { camelToSnakeCase } from "./camel-to-snake";
 import type * as JSX from "./types";
 
 const KEY = "_w-jsx";

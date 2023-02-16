@@ -1,26 +1,37 @@
-import { renderToStylesheet } from "wretched";
-import { css, extractCss } from "goober";
+import { renderToStylesheet, h } from "wretched";
+import { extractCss } from "goober";
+import { glob } from "goober/global";
 
 interface MainProps {
   fontFamily: string;
 }
 
+const colors = {
+  red: "#FF0000",
+  green: "#00FF00",
+  blue: "#0000FF",
+};
+
+// const colors = [<red color="var(--color-red)" />];
+
 function Main({ fontFamily }: MainProps) {
   return (
     <>
-      {/* <body margin="0" maxWidth="100vw" overflow="hidden"></body> */}
+      {Object.entries(colors).map(([key, value]) => h("root", { [`var--color-${key}`]: value }))}
 
       <body margin="0" fontFamily={fontFamily}>
         <childOne padding="1px">
-          <hover color="red" />
+          <hover color="var(--color-red)" cursor="pointer" />
 
           <child-two padding="1px">
+            <color-blue has color="blue"></color-blue>
+
             <child-three padding="1px"></child-three>
           </child-two>
         </childOne>
       </body>
 
-      <app id />
+      <app id color="green" />
 
       {/* <app
         id
@@ -37,12 +48,14 @@ function Main({ fontFamily }: MainProps) {
 }
 
 const results = renderToStylesheet(<Main fontFamily="Arial" />);
-const styles = css(results.stylesheet);
+
+glob(results.stylesheet);
+
+const styles = extractCss();
 
 document.getElementById("app")!.innerHTML = `<pre>
 ${JSON.stringify(results.stylesheet, null, 2)}
-</pre>
-<pre>${extractCss()}</pre>`;
+</pre>`;
 
-// const style = document.querySelector("style")!;
-// style.innerText = results.styles;
+const style = document.querySelector("style")!;
+style.innerText = styles;

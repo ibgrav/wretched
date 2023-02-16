@@ -17,6 +17,8 @@ export const renderToStylesheet = (element: JSX.Element) => {
   return { stylesheet };
 };
 
+const colonPrefix = new Set(["hover", "root"]);
+
 const populateStylesheet = (item: unknown, stylesheet: Stylesheet, isChild?: boolean) => {
   if (Array.isArray(item)) {
     if (isJSX(item)) {
@@ -29,11 +31,13 @@ const populateStylesheet = (item: unknown, stylesheet: Stylesheet, isChild?: boo
       } else {
         type = camelToSnakeCase(type);
 
-        let prefix = (isChild ? " " : "") + ".";
+        const childPrefix = isChild && !props.has ? " " : "";
 
-        if (props.id) prefix = (isChild ? " " : "") + "#";
+        let prefix = childPrefix + ".";
+
+        if (props.id) prefix = childPrefix + "#";
         if (HTMLTags.has(type)) prefix = "";
-        if (type === "hover") prefix = ":";
+        if (colonPrefix.has(type)) prefix = ":";
 
         let key = `${isChild ? "&" : ""}${prefix}${type}`;
 
@@ -54,7 +58,7 @@ const populateStylesheet = (item: unknown, stylesheet: Stylesheet, isChild?: boo
   }
 };
 
-const propsToSkip: Array<string> = ["children", "id"];
+const propsToSkip: Set<string> = new Set(["children", "has", "id"]);
 
 const propsToStyles = (props: JSX.Props<unknown>) => {
   let result: Record<string, string> = {};
@@ -63,11 +67,14 @@ const propsToStyles = (props: JSX.Props<unknown>) => {
   let length = keys.length;
 
   for (let i = 0; i < length; i++) {
-    if (!propsToSkip.includes(keys[i]!)) {
-      let value = props[keys[i] as keyof typeof props];
+    let key = keys[i]! as keyof typeof props;
+
+    if (!propsToSkip.has(key)) {
+      let value = props[key];
 
       if (typeof value === "string") {
-        result[camelToSnakeCase(keys[i]!)] = value;
+        if (key.startsWith("var")) key = key.substring(3) as keyof typeof props;
+        result[camelToSnakeCase(key)] = value;
       }
     }
   }

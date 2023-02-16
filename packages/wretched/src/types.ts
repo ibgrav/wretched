@@ -16,6 +16,7 @@ export type Element = [string, Type, Props<unknown>];
 
 export interface CustomProps {
   id?: boolean;
+  has?: boolean;
 }
 
 export interface InherentProps extends CustomProps {
