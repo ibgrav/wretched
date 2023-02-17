@@ -3,4 +3,4 @@ export { type JSX };
 
 export { Fragment, h } from "./jsx";
 
-export { renderToStylesheet } from "./render";
+export { renderToString } from "./render/render-to-string";

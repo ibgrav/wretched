@@ -1,4 +1,22 @@
-export const HTMLTags = new Set([
+export const AT_RULES: Set<string> = new Set([
+  "charset",
+  "color-profile",
+  "container",
+  "counter-style",
+  "font-face",
+  "font-feature-values",
+  "font-palette-values",
+  "import",
+  "keyframes",
+  "layer",
+  "media",
+  "namespace",
+  "page",
+  "propertyExpérimental",
+  "supports",
+]);
+
+export const HTML_TAGS: Set<string> = new Set([
   "a",
   "abbr",
   "address",

@@ -10,7 +10,7 @@ export const camelToSnakeCase = (value: string) => {
 
   for (let i = 0; i < length; i++) {
     const lower = value[i]!.toLowerCase();
-    if (value[i] !== lower) result += `-${lower}`;
+    if (value[i] !== lower) result += `${i === 0 ? "" : "-"}${lower}`;
     else result += value[i];
   }
 

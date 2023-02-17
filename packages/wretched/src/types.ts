@@ -38,7 +38,7 @@ export interface IntrinsicElements extends GlobalElements {
 
 export interface GlobalElements {
   // @ rules
-  media: MediaQuery;
+  media: MediaQuery | CSSProperties;
 
   // CSS Selectors
   root: CSSProperties;

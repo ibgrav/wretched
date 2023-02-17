@@ -3,10 +3,10 @@
   "packageManager": "pnpm@7.27.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm -F wretched build:runtime && pnpm -r --parallel dev"
+    "dev": "pnpm -F wretched build:runtime && pnpm --parallel -F wretched -F test dev"
   },
   "devDependencies": {
-    "prettier": "^2.8.4"
+    "prettier": "2.8.4"
   },
   "pnpm": {
     "peerDependencyRules": {

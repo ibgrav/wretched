@@ -1,60 +1,45 @@
-import { renderToStylesheet, h } from "wretched";
-import { extractCss } from "goober";
-import { glob } from "goober/global";
+import { renderToString, type JSX } from "wretched";
 
 interface MainProps {
   fontFamily: string;
 }
 
-const colors = {
-  red: "#FF0000",
-  green: "#00FF00",
-  blue: "#0000FF",
+const colorVars = {
+  "--color-red": "#FF0000",
+  "--color-green": "#00FF00",
+  "--color-blue": "#0000FF",
 };
 
-// const colors = [<red color="var(--color-red)" />];
+function Medium(props: JSX.CSSProperties) {
+  return <media min-width="600px" {...props} />;
+}
+
+function Large(props: JSX.CSSProperties) {
+  return <media min-width="900px" {...props} />;
+}
 
 function Main({ fontFamily }: MainProps) {
   return (
     <>
-      {Object.entries(colors).map(([key, value]) => h("root", { [`var--color-${key}`]: value }))}
+      <star boxSizing="border-box" />
 
-      <body margin="0" fontFamily={fontFamily}>
-        <childOne padding="1px">
-          <hover color="var(--color-red)" cursor="pointer" />
+      <body margin={0} />
 
-          <child-two padding="1px">
-            <color-blue has color="blue"></color-blue>
+      <pre margin={0} padding="10px" />
 
-            <child-three padding="1px"></child-three>
-          </child-two>
-        </childOne>
-      </body>
-
-      <app id color="green" />
-
-      {/* <app
-        id
-        width="100%"
-        whiteSpace="pre-wrap"
-        border="1px solid red"
-        margin="10px"
-        padding="10px"
-        fontFamily="initial"
-        background="image-set(url(logo.png) 2x, url(logo.png) 1x)"
-      ></app> */}
+      <myApp id color="purple" fontFamily={fontFamily}>
+        <red has color="red">
+          <orange color="orange" />
+        </red>
+      </myApp>
     </>
   );
 }
 
-const results = renderToStylesheet(<Main fontFamily="Arial" />);
+const styles = renderToString(<Main fontFamily="Arial" />, ".test");
 
-glob(results.stylesheet);
-
-const styles = extractCss();
-
-document.getElementById("app")!.innerHTML = `<pre>
-${JSON.stringify(results.stylesheet, null, 2)}
+document.getElementById("my-app")!.innerHTML = `<pre>
+${styles}
 </pre>`;
 
 const style = document.querySelector("style")!;
