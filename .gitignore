@@ -16,5 +16,8 @@ node_modules
 # build files
 dist
 
+# testing
+coverage
+
 # Vitepress
-packages/website/docs/.vitepress/cache
+cache

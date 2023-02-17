@@ -16,6 +16,7 @@ export type Element = [string, Type, Props<unknown>];
 
 export interface CustomProps {
   id?: boolean;
+  cls?: boolean;
   has?: boolean;
 }
 
@@ -25,6 +26,16 @@ export interface InherentProps extends CustomProps {
 
 export type CSSProperties = CSS.Properties;
 
+type AttributeSelectorFlags = "i" | "s";
+type AttributeSelectorOperator = "~" | "|" | "^" | "$" | "&" | "*";
+
+export interface AttributeSelector {
+  title: string;
+  value?: string;
+  flag?: AttributeSelectorFlags;
+  operator?: AttributeSelectorOperator;
+}
+
 export interface MediaQuery {
   screen?: boolean;
   print?: boolean;
@@ -33,12 +44,15 @@ export interface MediaQuery {
 }
 
 export interface IntrinsicElements extends GlobalElements {
-  [key: string]: CSSProperties | MediaQuery | CustomProps;
+  [key: string]: CSSProperties | MediaQuery | AttributeSelector | CustomProps;
 }
 
 export interface GlobalElements {
   // @ rules
-  media: MediaQuery | CSSProperties;
+  media: MediaQuery & CSSProperties;
+
+  // [attribute]
+  attribute: AttributeSelector & CSSProperties & CustomProps;
 
   // CSS Selectors
   root: CSSProperties;

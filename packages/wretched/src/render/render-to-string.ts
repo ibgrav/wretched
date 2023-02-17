@@ -4,13 +4,17 @@ import { renderStyles } from "./render-styles";
 import { renderChildren } from "./render-children";
 import { renderSelectors } from "./render-selectors";
 
-export function renderToString(item: unknown, scope: string = ""): string {
+export interface RenderOptions {
+  minify?: boolean;
+}
+
+export function renderToString(item: unknown, options: RenderOptions = {}, scope: string = ""): string {
   if (Array.isArray(item)) {
     if (isJSX(item)) {
       let [, type, props] = item;
 
       if (typeof type === "function") {
-        return renderToString(type(props), scope);
+        return renderToString(type(props), options, scope);
       }
 
       if (typeof type === "string") {
@@ -19,18 +23,22 @@ export function renderToString(item: unknown, scope: string = ""): string {
         // special types that are not JSX-safe
         if (type === "star") type = "*";
 
-        let styles = renderStyles({ props });
+        let styles = renderStyles({ props, options });
         let prefix = renderPrefix({ type, props });
         let selectors = renderSelectors({ scope, prefix, type, props });
-        let children = renderChildren({ props, selectors });
+        let children = renderChildren({ props, options, selectors });
 
+        // if there are no style props, avoid rendering an empty style declaration
+        if (!styles) return children;
+
+        if (options.minify) return `${selectors}{${styles}}${children}`;
         return `${selectors} {${styles}\n}\n\n${children}`;
       }
 
       return "";
     }
 
-    return item.reduce((p, n) => p + renderToString(n, scope), "");
+    return item.reduce((p, n) => p + renderToString(n, options, scope), "");
   }
 
   return "";

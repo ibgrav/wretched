@@ -1,4 +1,4 @@
-import { renderToString, type JSX } from "wretched";
+import { defineWretchedStyles, renderToString, type JSX } from "wretched";
 
 interface MainProps {
   fontFamily: string;
@@ -21,22 +21,29 @@ function Large(props: JSX.CSSProperties) {
 function Main({ fontFamily }: MainProps) {
   return (
     <>
-      <star boxSizing="border-box" />
+      <star boxSizing="border-box" color="red" />
 
-      <body margin={0} />
-
-      <pre margin={0} padding="10px" />
-
-      <myApp id color="purple" fontFamily={fontFamily}>
-        <red has color="red">
-          <orange color="orange" />
-        </red>
-      </myApp>
+      <media screen />
     </>
   );
 }
 
-const styles = renderToString(<Main fontFamily="Arial" />, ".test");
+const wretched = defineWretchedStyles(
+  <>
+    <a>
+      <div />
+      <attribute has title="href" value=".org" operator="*" flag="i" fontWeight="bold" color="green">
+        <hover color="red" />
+      </attribute>
+    </a>
+
+    <main color="blue" />
+  </>
+);
+
+const styles = renderToString(wretched, {
+  minify: false,
+});
 
 document.getElementById("my-app")!.innerHTML = `<pre>
 ${styles}

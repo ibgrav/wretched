@@ -14,11 +14,25 @@ export function renderSelectors({ scope, props, prefix, type }: RenderSelectorsP
   selectors += scope;
 
   // if has parent scope and is not marked as 'has', as in #app.has-class vs #app .child-class
-  if (scope && !props.has) selectors += " ";
+  // skip for psuedo selectors and psuedo elements
+  if (scope && !props.has && prefix !== ":" && prefix !== "::") selectors += " ";
 
-  selectors += prefix;
+  if (type === "attribute") {
+    let { title, value, flag, operator } = props as JSX.AttributeSelector;
+    selectors += `[${title}`;
 
-  selectors += camelToSnakeCase(type);
+    if (operator) selectors += operator;
+
+    selectors += "=";
+
+    if (value) selectors += `"${value}"`;
+    if (flag) selectors += ` ${flag}`;
+
+    selectors += "]";
+  } else {
+    selectors += prefix;
+    selectors += camelToSnakeCase(type);
+  }
 
   return selectors;
 }
